@@ -1,0 +1,40 @@
+@font-face {
+    font-family: Inter;
+    src: url(../font/inter.ttf);
+}
+
+.movie-card {
+    display: flex;
+    flex-direction: row;
+    
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  h5 {
+    font-size: 20px;
+    margin: 0;
+    margin-top: 10px;
+  }
+  
+
+  .card-content button {
+    font-size: 12px;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .overview{
+    
+    overflow: hidden; /* Скрываем избыточный текст */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+    display: -webkit-box; /* Для поддержки многоточий */
+    -webkit-line-clamp: 8; /* Количество строк (опционально) */
+    -webkit-box-orient: vertical;
+
+    margin: 0; /* Сбрасываем отступы */
+  }
+
+  
+  
