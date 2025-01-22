@@ -1,11 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import MovieCard from "../movieCard/MovieCard";
 import { Row } from "antd";
 import "./movieList.css";
-import { Pagination } from 'antd'
-export default class MovieList extends React.Component {
-  render() {
-   const { searchValue } = this.props
+ const MovieList = ( { searchValue }) => {
+
     
     return (
       <div className="movie-list-container">
@@ -18,4 +16,5 @@ export default class MovieList extends React.Component {
       </div>
     );
   }
-}
+
+export default MovieList;

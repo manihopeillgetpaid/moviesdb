@@ -1,79 +1,84 @@
-import React, { Component } from "react";
+import React, {  useEffect, useState } from "react";
 import ApiServ from "../../services/ApiServ";
-import { format, set } from "date-fns";
-import { Card, Col, Row, Button } from "antd";
+import { format } from "date-fns";
+import { Col, Row, Button } from "antd";
 import { MehOutlined, LoadingOutlined } from '@ant-design/icons';
 import "./movieCard.css";
 import ErrorIndicator from "../errorIndicator/ErrorIndicator";
-import NoMovieError from "../noMovieError/NoMovieError";
 import { Pagination} from 'antd'
-export default class MovieCard extends React.Component {
-  swapiServce = new ApiServ();
+ const MovieCard = ({ searchValue }) => {
+const swapiServce = ApiServ();
+const [movies, setMovies] = useState([]);
+const [genres, setGenres] = useState({});
+const [loading, setLoading] = useState(false);
+const [err, setErr] = useState(false);
+const [isOffline, setIsOffline] = useState(!navigator.onLine);
+const [noMovieError, setNoMovieError] = useState(false);
+useEffect(() => {
+    updateGenre();
+    window.addEventListener("online", handleConnectionStatus);
+    window.addEventListener("offline", handleConnectionStatus);
+    return () => {
+        window.removeEventListener("online", handleConnectionStatus);
+        window.removeEventListener("offline", handleConnectionStatus);
+     }
+},[]);
+useEffect(() => {
+    if (!searchValue) {
+      setNoMovieError(false); // Нет ошибки, если пользователь не ввел запрос
+      return;
+    }
+    if (!movies || movies.length === 0) {
+      setNoMovieError(true); // Нет фильмов, устанавливаем ошибку
+    } else {
+      setNoMovieError(false); // Есть фильмы, сбрасываем ошибку
+    }
+  }, [movies, searchValue]);
+  
+useEffect(() =>{
+    updateMovie(searchValue)
+}, [searchValue]);
 
-  state = {
-    movies: [],
-    genres: {},
-    loading: false,
-    err: false,
-    isOffline: !navigator.onLine,
-    noMovieError: false
+const handleConnectionStatus = () => {
+ setIsOffline(!navigator.onLine)
+  };
+
+  const updateMovie = (val) => {
+   
+
+    swapiServce
+      .getMovie(val)
+      .then((movie) => {
+        if (movie.results && movie.results.length > 0) {
+          setMovies(movie.results); // Устанавливаем фильмы
+          setNoMovieError(false); // Сбрасываем ошибку
+        } else {
+          setMovies([]); // Очищаем массив фильмов
+          setNoMovieError(true); // Устанавливаем ошибку
+        }
+        setLoading(false); // Сбрасываем состояние загрузки
+      })
+      .catch(() => {
+        setErr(true); // Устанавливаем ошибку при сбое API
+        setLoading(false);
+      });
   };
   
- componentDidMount(){
-    this.updateGenre();
-    window.addEventListener("online", this.handleConnectionStatus);
-    window.addEventListener("offline", this.handleConnectionStatus);
-}
-componentWillUnmount(){
-    window.removeEventListener("online", this.handleConnectionStatus);
-    window.removeEventListener("offline", this.handleConnectionStatus);
-}
-componentDidUpdate(prevProps, prevState){
-    if(prevProps.searchValue !== this.props.searchValue){
-        this.updateMovie(this.props.searchValue)
-    }
-}
-handleConnectionStatus = () => {
-    this.setState({ isOffline: !navigator.onLine });
-  };
+  
 
-  updateMovie(val) {
-    this.setState({
-        loading: true
-    })
-    this.swapiServce.getMovie(val).then((movie) => {
-       
-      this.setState({
-        movies: movie.results,
-        loading: false
-      });
-    
-      
-    })
-   
-  }
-
-onError = () => {
-    
-    this.setState({
-        err: true, 
-        loading: false
-    })
-}
-  updateGenre() {
-    this.swapiServce.getGenre().then((data) => {
+ const updateGenre = () =>{
+    swapiServce.getGenre().then((data) => {
       const genresMap = {};
       data.genres.forEach((genre) => {
         genresMap[genre.id] = genre.name;
       });
-      this.setState({
-        genres: genresMap,
-      });
+      setGenres(genresMap);
+     
     })
    
   }
 
-imageCheck(item){
+const imageCheck = (item) =>{
 if (item.poster_path == null || item.poster_path == undefined) {
    return <NoPicture />
 }
@@ -90,17 +95,36 @@ return (
   />
 )
 }
-
-  render() {
-  
-    const { movies, genres, loading, err, isOffline, noMovieError } = this.state;
-const { searchValue } = this.props;
-if(!movies ){
-    return <NoMovieError/>
+if (isOffline) {
+    return (
+      <div className="offline-indicator">
+        <h3>No Internet Connection</h3>
+        <p>Please check your network and try again.</p>
+      </div>
+    );
+  }
+if(loading) {
+    return(
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+        <LoadingOutlined style={{ fontSize: '50px' }} spin />
+      </div>
+    )
 }
- 
-if(searchValue){
-    const limitedMovies = movies.slice(0, 20);
+
+if(err){
+    return <ErrorIndicator/>
+}
+if(noMovieError){
+    return(
+        <div>
+        <p>There's no such movie</p>
+    </div>
+    )
+}
+
+ else if(searchValue){
+    const limitedMovies = Array.isArray(movies) ? movies.slice(0, 20) : [];
+
     return(
        
             <>
@@ -132,7 +156,7 @@ if(searchValue){
                     
                         }}
                       >
-                       {this.imageCheck(movie)}
+                       {imageCheck(movie)}
                       </Col>
                  
                       <Col xs={24} sm={16} md={12} className="card-content">
@@ -165,38 +189,21 @@ if(searchValue){
                   </div>
                 </Col>
               ))}
-              <Pagination defaultCurrent={1} total={50} align="center" style={{
-                marginBottom: '10px'
-              }}/>
+             {movies.length > 0 && (
+  <Pagination
+    defaultCurrent={1}
+    total={50}
+    align="center"
+    style={{ marginBottom: "10px" }}
+  />
+)}
+
             </>
           );
     
 }
-    if (isOffline) {
-        return (
-          <div className="offline-indicator">
-            <h3>No Internet Connection</h3>
-            <p>Please check your network and try again.</p>
-          </div>
-        );
-      }
-    if(loading) {
-        return(
-            <div style={{ textAlign: 'center', padding: '20px' }}>
-            <LoadingOutlined style={{ fontSize: '50px' }} spin />
-          </div>
-        )
-    }
-    if(err){
-        return <ErrorIndicator/>
-    }
-    if(noMovieError){
-        return <NoMovieError/>
-    }
-   
-   
-   
-  }
+
+
 }
 
 
@@ -217,3 +224,5 @@ const NoPicture = () => {
         </div>
     )
 }
+
+export default MovieCard;
