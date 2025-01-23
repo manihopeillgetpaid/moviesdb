@@ -22,15 +22,15 @@ import React, { useState }  from "react";
       }
       
       
-      const getMovie = async (url) =>{
+      const getMovie = async (url, page) =>{
         const query = encodeURIComponent(url);
-        const data = await getResource(`/search/movie?query=${query}&language=en-US&page=1&include_adult=false`);
+        const data = await getResource(`/search/movie?query=${query}&language=en-US&page=${page}&include_adult=false`);
       
         // Проверяем, есть ли данные
         if (!data || !data.results || data.results.length === 0) {
           return { results: [] }; // Возвращаем пустой массив, чтобы избежать ошибок
         }
-      
+      console.log(data)
         return data;
       }
       

@@ -14,6 +14,8 @@ const [loading, setLoading] = useState(false);
 const [err, setErr] = useState(false);
 const [isOffline, setIsOffline] = useState(!navigator.onLine);
 const [noMovieError, setNoMovieError] = useState(false);
+const[pages, setPages] = useState(1);
+const [currentPage, setCurrentPage] = useState(1); 
 useEffect(() => {
     updateGenre();
     window.addEventListener("online", handleConnectionStatus);
@@ -36,30 +38,33 @@ useEffect(() => {
   }, [movies, searchValue]);
   
 useEffect(() =>{
-    updateMovie(searchValue)
+    setCurrentPage(1)
+    updateMovie(searchValue, 1)
 }, [searchValue]);
 
 const handleConnectionStatus = () => {
  setIsOffline(!navigator.onLine)
   };
 
-  const updateMovie = (val) => {
+  const updateMovie = (val, pages) => {
    
 
     swapiServce
-      .getMovie(val)
+      .getMovie(val, pages)
       .then((movie) => {
         if (movie.results && movie.results.length > 0) {
-          setMovies(movie.results); // Устанавливаем фильмы
-          setNoMovieError(false); // Сбрасываем ошибку
+          setPages(movie.total_pages)
+          setMovies(movie.results);
+          setNoMovieError(false);
+         
         } else {
-          setMovies([]); // Очищаем массив фильмов
-          setNoMovieError(true); // Устанавливаем ошибку
+          setMovies([]); 
+          setNoMovieError(true);
         }
-        setLoading(false); // Сбрасываем состояние загрузки
+        setLoading(false);
       })
       .catch(() => {
-        setErr(true); // Устанавливаем ошибку при сбое API
+        setErr(true);
         setLoading(false);
       });
   };
@@ -123,12 +128,13 @@ if(noMovieError){
 }
 
  else if(searchValue){
-    const limitedMovies = Array.isArray(movies) ? movies.slice(0, 20) : [];
+   
 
     return(
        
             <>
-              {limitedMovies.map((movie, index) => (
+              {movies.map((movie, index) => (
+               
                 <Col
                   key={index}
                   xs={24}
@@ -137,6 +143,7 @@ if(noMovieError){
                   style={{   
                   }}
                 >
+                    
                   <div
                     className="movie-card"
                     style={{
@@ -191,10 +198,14 @@ if(noMovieError){
               ))}
              {movies.length > 0 && (
   <Pagination
-    defaultCurrent={1}
-    total={50}
+    current={currentPage}
+    total={pages+'0'}
     align="center"
     style={{ marginBottom: "10px" }}
+    onChange={(page) => {
+        setCurrentPage(page)
+        updateMovie(searchValue, page);
+    }}
   />
 )}
 
