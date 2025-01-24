@@ -1,7 +1,7 @@
 import React, {  useEffect, useState } from "react";
 import ApiServ from "../../services/ApiServ";
 import { format } from "date-fns";
-import { Col, Row, Button } from "antd";
+import { Col, Row, Button, Rate } from "antd";
 import { MehOutlined, LoadingOutlined } from '@ant-design/icons';
 import "./movieCard.css";
 import ErrorIndicator from "../errorIndicator/ErrorIndicator";
@@ -168,7 +168,9 @@ if(noMovieError){
                  
                       <Col xs={24} sm={16} md={12} className="card-content">
                         <h5>{movie.title}</h5>
-                        <p style={{ color: "#827E7E" }}>
+                        <p style={{ color: "#827E7E", 
+                          margin: '5px 0'
+                         }}>
                         {movie.release_date ? format(new Date(movie.release_date), "MMMM d, yyyy") : null}
                         </p>
                         <div>
@@ -180,17 +182,30 @@ if(noMovieError){
                                 key={index}
                                 style={{
                                   border: "1px solid rgba(217, 217, 217, 1)",
-                                  padding: "5px",
+                                  padding: "0 5px",
                                   color: "rgba(0, 0, 0, 0.65)",
                                   marginRight: "8px",
-                                  marginBottom: "8px",
+                                  marginBottom: '8px',
+                                  borderRadius: '1px',
+                                  height: '20px'
                                 }}
                               >
                                 {genre}
                               </Button>
                             ))}
                         </div>
-                        <p className="overview">{movie.overview}</p>
+                        <div>
+                         <p className="overview">{movie.overview}</p>
+                         </div>
+                          <div className="movie-rating">
+                          <Rate
+                          allowHalf
+                          count={10}
+                          disabled
+                          className="rate"
+                          />
+                          </div>
+                        
                       </Col>
                     </Row>
                   </div>

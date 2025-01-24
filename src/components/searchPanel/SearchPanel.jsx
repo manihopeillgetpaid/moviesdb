@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import './searchPanel.css';
 
 import { AutoComplete } from 'antd';
-import ApiServ from "../../services/ApiServ";
 import MovieList from "../movieList/MovieList";
 import { LoadingOutlined } from "@ant-design/icons";
 

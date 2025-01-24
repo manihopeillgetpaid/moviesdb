@@ -1,11 +1,14 @@
 import React from "react";
-import SearchPanel from "../searchPanel/SearchPanel";
+import Header from '../header/Header.jsx';
 import './app.css'
+import MovieCard from "../movieCard/MovieCard.jsx";
 const App = () => {
     return(
-        <>
-        <SearchPanel />     
-        </>
+       
+        <Header/>
+           
+       
+      
     )   
 }
 export default App;

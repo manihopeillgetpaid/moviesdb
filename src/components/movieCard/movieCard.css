@@ -24,17 +24,30 @@
     margin: 0;
     padding: 0;
   }
-  
-  .overview{
-    
-    overflow: hidden; /* Скрываем избыточный текст */
-    text-overflow: ellipsis; /* Добавляем многоточие */
-    display: -webkit-box; /* Для поддержки многоточий */
-    -webkit-line-clamp: 8; /* Количество строк (опционально) */
-    -webkit-box-orient: vertical;
-
-    margin: 0; /* Сбрасываем отступы */
+  .movie-card {
+    position: relative;
   }
 
+  .card-content {
+    height: 100%;
+    padding: 15px;
+    position: relative;
+  }
   
+  .overview {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px; /* Поля вокруг текста */
+    white-space: nowrap;
+    box-sizing: border-box;
+    overflow: hidden; /* Обрезаем всё за пределами блока */
+    text-overflow: ellipsis; 
+    
+  }
   
+.rate{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
