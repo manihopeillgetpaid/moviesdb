@@ -98,7 +98,11 @@ const addToRated = (movieId, rating) => {
   if(!guestSessionId){
     return;
   }
-  return swapiServce.rateMovie(movieId, rating, guestSessionId)
+ try{ 
+  return swapiServce.rateMovie(movieId, rating, guestSessionId)}
+ catch(e){
+  return( <ErrorIndicator/>)
+ }
 }
 
 
@@ -139,6 +143,7 @@ if(noMovieError){
               key={index}
               movie={movie}
               genres={genres}
+              showRating={true}
               onRate={addToRated}/> 
                ))}
              {movies.length > 0 && (

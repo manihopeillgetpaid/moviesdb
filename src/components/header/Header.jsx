@@ -42,17 +42,14 @@ const Header = () => {
             <div style={{
                 margin: '0 36px'
             }}>
-
-           
-            <Row gutter={[36]} style={{
-               
+            <Row gutter={[36]} style={{            
             }}>
             {Array.isArray(ratedMovies) && ratedMovies.map((movie, index) => (
-              <MovieItem
-              
+              <MovieItem 
                 key={index}
                 movie={movie}
                 genres={genres}
+                onRate={() => {}} 
                 showRating={false} // Отключаем возможность изменения рейтинга
               />
             ))}

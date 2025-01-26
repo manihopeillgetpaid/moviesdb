@@ -25,7 +25,7 @@ const MovieItem = ({
                 padding: '0',
               objectFit: "cover",
             }}
-            className="movieImage"
+            
           />
         )
         }
@@ -47,29 +47,17 @@ const MovieItem = ({
             xs={24}
             sm={12}
             lg={12}
-            style={{   
-            }}
-          >
-              
+            
+          >    
             <div
               className="movie-card">            
-                 
-                {imageCheck(movie)}
+                <div className="movieImage">
+                {imageCheck(movie)}</div>              
                 <div className="card-content">
-                    <div className="cont" style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                         
-                    }}> <h5>{movie.title}</h5>
+                    <h5>{movie.title}</h5>
                     {showRating && ( <p className="vote" style={{
-                    border: `2px solid ${getBorderColor(movie.vote_average)}` ,
-             
-                
+                    border: `2px solid ${getBorderColor(movie.vote_average)}`                         
                     }}>{movie.vote_average.toFixed(1)}</p>)}
-                </div>
-                   
-                 
                     <p style={{ color: "#827E7E", 
                         margin: '0 0 5px 0'
                     }}>
@@ -79,6 +67,7 @@ const MovieItem = ({
                     {movie.genre_ids
                       .map((id) => genres[id])
                       .filter(Boolean)
+                      .slice(0, 3)
                       .map((genre, index) => (
                         <Button
                           key={index}
@@ -124,17 +113,18 @@ const NoPicture = () => {
             display:'flex',
             flexDirection: 'column'
         }}>
-          <MehOutlined 
-          style={{
-
-          fontSize: '50px',
-          margin: '50px'
-          }}/>
+         
             <span style={{
                 fontSize: '10px',
                textAlign: 'center'
        
             }}>Sorry! This image has no poster</span>
+             <MehOutlined 
+          style={{
+
+          fontSize: '40px',
+          margin: '40px'
+          }}/>
         </div>
     )
 }

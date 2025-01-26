@@ -3,7 +3,83 @@
     src: url(../font/inter.ttf);
 }
 
+@media  (max-width: 500px) {
+    .movie-card{
+        display: flex;
+    flex-direction: row;
+   
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+       position: relative;
+        height: 245px;
+       
+       
+    }
+   .movieImage{
+   height: 45%;
 
+   margin: 10px;
+   }
+   .releaseDate{
+    grid-area: 'date';
+   }
+   .overview{
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    margin: 0;
+    padding: 0;
+    margin-right: 10px;
+    margin-bottom: 10px; 
+    box-sizing: border-box;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    line-height: 1.2; /* Adjust line height as needed */
+    max-height: 4.8em; /* 3 lines * 1.2 line-height = 3.6em */
+    margin-top: 10px;
+   }
+   h5{
+    font-size: 20px;
+    margin: 0;
+    margin-top: 10px;
+   max-width: 85%;
+   grid-area: 'title';
+   }
+   .vote{
+    position: absolute;
+    font-size: 12px;
+    top: 0px;
+    right:10px;
+    width: 30px;
+    height: 30px;
+  
+   border-radius: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   
+   }
+   .card-content button {
+    font-size: 12px;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0;
+  }
+  .rate{
+    position: absolute;
+   bottom: 10px;
+  right: 10px;
+    
+  }
+
+
+}
+@media (min-width: 501px) {
+    
 
 .movie-card {
     display: flex;
@@ -79,9 +155,13 @@ height: 100%;
 
 .movieImage{
     flex:1;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 
 
 
  
  
+}
