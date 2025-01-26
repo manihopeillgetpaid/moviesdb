@@ -59,6 +59,7 @@ const handleConnectionStatus = () => {
     swapiServce
       .getMovie(val, pages)
       .then((movie) => {
+        setNoMovieError(false);
         if (movie.results && movie.results.length > 0) {
           setPages(movie.total_pages)
           setMovies(movie.results);
