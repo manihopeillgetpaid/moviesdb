@@ -6,6 +6,7 @@ import { MehOutlined, LoadingOutlined } from '@ant-design/icons';
 import "./movieCard.css";
 import ErrorIndicator from "../errorIndicator/ErrorIndicator";
 import { Pagination} from 'antd'
+import MovieItem from "../movieItem/MovieItem";
  const MovieCard = ({ searchValue }) => {
 const swapiServce = ApiServ();
 const [movies, setMovies] = useState([]);
@@ -16,10 +17,16 @@ const [isOffline, setIsOffline] = useState(!navigator.onLine);
 const [noMovieError, setNoMovieError] = useState(false);
 const[pages, setPages] = useState(1);
 const [currentPage, setCurrentPage] = useState(1); 
+const [guestSessionId, setGuestSessionId] = useState(null);;
+
+
 useEffect(() => {
     updateGenre();
     window.addEventListener("online", handleConnectionStatus);
     window.addEventListener("offline", handleConnectionStatus);
+    swapiServce.startGuestSession().then((id) => {
+      setGuestSessionId(id);
+    localStorage.setItem('guestSessionId', id)})
     return () => {
         window.removeEventListener("online", handleConnectionStatus);
         window.removeEventListener("offline", handleConnectionStatus);
@@ -56,6 +63,7 @@ const handleConnectionStatus = () => {
           setPages(movie.total_pages)
           setMovies(movie.results);
           setNoMovieError(false);
+          console.log(movie);
          
         } else {
           setMovies([]); 
@@ -83,23 +91,16 @@ const handleConnectionStatus = () => {
    
   }
 
-const imageCheck = (item) =>{
-if (item.poster_path == null || item.poster_path == undefined) {
-   return <NoPicture />
+
+
+const addToRated = (movieId, rating) => {
+  if(!guestSessionId){
+    return;
+  }
+  return swapiServce.rateMovie(movieId, rating, guestSessionId)
 }
-return (
-    <img
-    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-    alt=''
-    style={{
-      width: "100%",
-      height: "100%",
-        padding: '0',
-      objectFit: "cover",
-    }}
-  />
-)
-}
+
+
 if (isOffline) {
     return (
       <div className="offline-indicator">
@@ -131,88 +132,16 @@ if(noMovieError){
    
 
     return(
-       
             <>
               {movies.map((movie, index) => (
-               
-                <Col
-                  key={index}
-                  xs={24}
-                  sm={12}
-                  lg={12}
-                  style={{   
-                  }}
-                >
-                    
-                  <div
-                    className="movie-card"
-                    style={{
-                      
-                      display: "flex",
-                      flexDirection: "row",
-                      width: "100%",
-                      height: "279px",
-                    }}
-                  >            
-                    <Row gutter={16}>
-                      <Col
-                        xs={24}
-                        sm={8}
-                        md={10}
-                        style={{
-                    
-                        }}
-                      >
-                       {imageCheck(movie)}
-                      </Col>
-                 
-                      <Col xs={24} sm={16} md={12} className="card-content">
-                        <h5>{movie.title}</h5>
-                        <p style={{ color: "#827E7E", 
-                          margin: '5px 0'
-                         }}>
-                        {movie.release_date ? format(new Date(movie.release_date), "MMMM d, yyyy") : null}
-                        </p>
-                        <div>
-                          {movie.genre_ids
-                            .map((id) => genres[id])
-                            .filter(Boolean)
-                            .map((genre, index) => (
-                              <Button
-                                key={index}
-                                style={{
-                                  border: "1px solid rgba(217, 217, 217, 1)",
-                                  padding: "0 5px",
-                                  color: "rgba(0, 0, 0, 0.65)",
-                                  marginRight: "8px",
-                                  marginBottom: '8px',
-                                  borderRadius: '1px',
-                                  height: '20px'
-                                }}
-                              >
-                                {genre}
-                              </Button>
-                            ))}
-                        </div>
-                        <div>
-                         <p className="overview">{movie.overview}</p>
-                         </div>
-                          <div className="movie-rating">
-                          <Rate
-                          allowHalf
-                          count={10}
-                          disabled
-                          className="rate"
-                          />
-                          </div>
-                        
-                      </Col>
-                    </Row>
-                  </div>
-                </Col>
-              ))}
+              <MovieItem
+              key={index}
+              movie={movie}
+              genres={genres}
+              onRate={addToRated}/> 
+               ))}
              {movies.length > 0 && (
-  <Pagination
+              <Pagination
     current={currentPage}
     total={pages+'0'}
     align="center"
@@ -225,7 +154,7 @@ if(noMovieError){
 )}
 
             </>
-          );
+ );
     
 }
 
@@ -233,22 +162,5 @@ if(noMovieError){
 }
 
 
-const NoPicture = () => {
-    return (
-        <div className="no-picture">
-          <MehOutlined 
-          style={{
-
-          fontSize: '50px',
-          margin: '50px'
-          }}/>
-            <span style={{
-                fontSize: '20px',
-               textAlign: 'center'
-       
-            }}>Sorry! this image has no poster</span>
-        </div>
-    )
-}
 
 export default MovieCard;

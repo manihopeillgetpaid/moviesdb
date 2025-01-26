@@ -1,0 +1,87 @@
+@font-face {
+    font-family: Inter;
+    src: url(../font/inter.ttf);
+}
+
+
+
+.movie-card {
+    display: flex;
+    flex-direction: row;
+    height: 279px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
+  }
+  .card-content {
+  padding: 0 10px;
+box-sizing: border-box;
+width: 100%;
+height: 100%;
+   overflow: hidden;
+   flex: 2;
+   position: relative;
+   padding-bottom: 20px;
+  }
+  h5 {
+    font-size: 20px;
+    margin: 0;
+    margin-top: 10px;
+   max-width: 85%;
+  }
+  
+
+  .card-content button {
+    font-size: 12px;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  .overview {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px; 
+    box-sizing: border-box;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    line-height: 1.2; /* Adjust line height as needed */
+    max-height: 4.8em; /* 3 lines * 1.2 line-height = 3.6em */
+  }
+  
+.rate{
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 110%;
+}
+
+.vote{
+ position: relative;
+  font-size: 12px;
+  top: 0px;
+  right:0px;
+  width: 30px;
+  height: 30px;
+
+ border-radius: 100%;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.movieImage{
+    flex:1;
+}
+
+
+
+ 
+ 
