@@ -31,23 +31,21 @@ const MovieItem = ({
         }
         const getBorderColor = (voteAverage) => {
             if (voteAverage < 3) {
-              return "#E90000"; // Красный
+              return "#E90000"; 
             } else if (voteAverage >= 3 && voteAverage < 5) {
-              return "#E97E00"; // Оранжевый
+              return "#E97E00"; 
             } else if (voteAverage >= 5 && voteAverage < 7) {
-              return "#E9D100"; // Желтый
+              return "#E9D100";
             } else if (voteAverage >= 7) {
-              return "#66E900"; // Зеленый
+              return "#66E900"; 
             }
-            return "#CCCCCC"; // По умолчанию (серый)
+            return "#CCCCCC"; 
           };
           return(
-            <Col
-          
+            <Col          
             xs={24}
             sm={12}
-            lg={12}
-            
+            lg={12}   
           >    
             <div
               className="movie-card">            

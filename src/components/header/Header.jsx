@@ -18,12 +18,9 @@ const Header = () => {
           return;
         }
         const ratedMoviesData = await swapi.getRatedMovies(guestSessionId);
-        // Извлекаем массив фильмов из `results`
-        setRatedMovies(ratedMoviesData.results || []);
-    
+        setRatedMovies(ratedMoviesData.results || []); 
    }
    const onChange = async (key) => {
-   
     if (key === '2'){
         
         await fetchRatedMovies();
